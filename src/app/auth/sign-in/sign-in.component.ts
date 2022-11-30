@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth/auth.service';
 @Component({
   selector: 'app-sign-in',
   templateUrl: './sign-in.component.html',
@@ -7,7 +9,7 @@ import { FormControl, Validators, FormGroup } from '@angular/forms';
 })
 export class SignInComponent implements OnInit {
   group: FormGroup;
-  constructor() {}
+  constructor(private router: Router, private authService: AuthService) {}
 
   ngOnInit(): void {
     this.group = new FormGroup({
@@ -18,16 +20,13 @@ export class SignInComponent implements OnInit {
     });
   }
   onSignIn() {
-    console.log('AT: FORMS GROUP', this.group);
     const values = this.group.value;
     const formIsValid = this.group.valid;
-    const controlName = this.group.get('name');
-    const controlNameIsValid = this.group.get('name').valid;
-
-    if (values.password === values.confirmPassword) {
-      console.log('AT: FORMULARIO ES VALIDO');
+    if (formIsValid && values.password === values.confirmPassword) {
+      this.authService.signIn(values.name, values.email, values.password);
+      this.router.navigate(['/', 'module-home', 'home', 'dashboard']);
     } else {
-      console.error('Las contrateras no son iguales');
+      console.error('Passwords do not match');
     }
   }
 }
