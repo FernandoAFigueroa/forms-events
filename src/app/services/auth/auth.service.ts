@@ -8,9 +8,9 @@ export class AuthService {
   private users: IUser[] = [
     {
       id: 1,
-      name: 'Gaby Mtz',
+      name: 'Gaby',
       email: 'gabby@mail.com',
-      password: '1223Gabby',
+      password: '1223',
     },
   ];
 

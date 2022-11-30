@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { AuthService } from '../../services/auth/auth.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -8,7 +9,7 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
-  constructor(private router: Router) {}
+  constructor(private router: Router, private authService: AuthService) {}
 
   ngOnInit(): void {
     this.loginForm = new FormGroup({
@@ -18,7 +19,14 @@ export class LoginComponent implements OnInit {
   }
   onLogin() {
     if (this.loginForm.valid) {
-      console.log('AT: Login correcto');
+      const email = this.loginForm.get('email').value;
+      const password = this.loginForm.get('password').value;
+      const isValidUser = this.authService.login(email, password);
+      if (isValidUser) {
+        this.router.navigate(['/', 'module-home', 'dashboard']);
+      } else {
+        console.error('El usuario no existe');
+      }
     } else {
       this.loginForm.markAllAsTouched();
       console.error('AT: Ingrese todo los campos');
@@ -27,9 +35,5 @@ export class LoginComponent implements OnInit {
 
   onSignIn() {
     this.router.navigate(['/', 'module-auth', 'sign-in']);
-  }
-
-  onKeyPress(event: any) {
-    console.log('AT: $EVENT', event);
   }
 }
