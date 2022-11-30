@@ -25,7 +25,7 @@ export class LoginComponent implements OnInit {
       if (isValidUser) {
         this.router.navigate(['/', 'module-home', 'dashboard']);
       } else {
-        console.error('El usuario no existe');
+        console.error('user does not exist');
       }
     } else {
       this.loginForm.markAllAsTouched();
